@@ -7,19 +7,20 @@ using Labyrinth.Characters;
 using Labyrinth.Points;
 using Labyrinth.Weapons;
 using System.Media;
+using System;
 
 class Sample
 {
     static int width = 70;
     static int height = 20;
 
-    static Bomb bomb=new Bomb();
+    static Bomb bomb = new Bomb();
     static Player player = new Player();
     static Enemy enemy = new Enemy();
 
     static Sword sword = new Sword();
     static Blaster blaster = new Blaster();
-    
+
     static int[,] maze = new int[height, width];
     static int money_total = 0;
     static ConsoleKeyInfo k;
@@ -56,10 +57,10 @@ class Sample
         Console.ForegroundColor = ConsoleColor.White;
         Console.Write("* - " + bomb.getBombCount());
 
-        if (bomb.getBombRadius() == 2)Console.Write("   2x2       ");
-        else if (bomb.getBombRadius() == 3)Console.Write("   3x3       ");
-        else if (bomb.getBombRadius() == 4)Console.Write("   4x4       ");
-        else if (bomb.getBombRadius() == 5)Console.Write("   5x5 (max)");
+        if (bomb.getBombRadius() == 2) Console.Write("   2x2       ");
+        else if (bomb.getBombRadius() == 3) Console.Write("   3x3       ");
+        else if (bomb.getBombRadius() == 4) Console.Write("   4x4       ");
+        else if (bomb.getBombRadius() == 5) Console.Write("   5x5 (max)");
     }
 
     static void ShowEnemy()
@@ -90,12 +91,12 @@ class Sample
         Console.BackgroundColor = ConsoleColor.DarkRed;         /// explode color                                                                           
         Console.SetCursorPosition(bomb.getBombCoord().x, bomb.getBombCoord().y);
         Console.Write(" ");
-       
+
         maze[bomb.getBombCoord().x, bomb.getBombCoord().y] = 0;
         for (int n = -bomb.getBombRadius(); n <= bomb.getBombRadius(); n++)
         {
             if (n == 0) continue;
-            if(bomb.getBombCoord().x + n >= width- 1 || bomb.getBombCoord().x + n <=0)break;
+            if (bomb.getBombCoord().x + n >= width - 1 || bomb.getBombCoord().x + n <= 0) break;
             if ((bomb.getBombCoord().x + n) > 0)
             {
                 Console.BackgroundColor = ConsoleColor.DarkRed;         /// explode color
@@ -114,7 +115,7 @@ class Sample
                 {
                     for (int i = 0; i < enemy.getEnemyCount(); i++)
                     {
-                        if ((bomb.getBombCoord().x + n) == enemy.getEnemyElement(i).cord.x && bomb.getBombCoord().y ==enemy.getEnemyElement(i).cord.y)
+                        if ((bomb.getBombCoord().x + n) == enemy.getEnemyElement(i).cord.x && bomb.getBombCoord().y == enemy.getEnemyElement(i).cord.y)
                         {
                             enemy.getEnemyElement(i).cord.x = enemy.getEnemyElement(enemy.getEnemyCount() - 1).cord.x;
                             enemy.getEnemyElement(i).cord.y = enemy.getEnemyElement(enemy.getEnemyCount() - 1).cord.y;
@@ -188,7 +189,7 @@ class Sample
         {
             if (bomb.getBombCoord().y + n > 0)
             {
-                Console.SetCursorPosition(bomb.getBombCoord().x, bomb.getBombCoord().y+n);
+                Console.SetCursorPosition(bomb.getBombCoord().x, bomb.getBombCoord().y + n);
                 Console.Write(" ");
             }
         }
@@ -200,12 +201,12 @@ class Sample
         for (int n = -bomb.getBombRadius(); n <= bomb.getBombRadius(); n++)
         {
             if (n == 0) continue;
-            if(bomb.getBombCoord().x== player.getPlayerCoord().x && bomb.getBombCoord().y + n == player.getPlayerCoord().y)
+            if (bomb.getBombCoord().x == player.getPlayerCoord().x && bomb.getBombCoord().y + n == player.getPlayerCoord().y)
             {
                 Console.BackgroundColor = ConsoleColor.Black;
                 Sample.Died();
             }
-            
+
         }
         for (int n = -bomb.getBombRadius(); n <= bomb.getBombRadius(); n++)
         {
@@ -246,26 +247,27 @@ class Sample
 
     static void Attack(Weapon weapon)
     {
-        if(weapon.GetType() == typeof(Sword)) {
+        if (weapon.GetType() == typeof(Sword))
+        {
             for (int n = -1; n < 2; n++)
             {
                 for (int m = -1; m < 2; m++)
                 {
-                    if (maze[player.getPlayerCoord().y + n, (player.getPlayerCoord().x+m)] == 3)                    // check if enemy
+                    if (maze[player.getPlayerCoord().y + n, (player.getPlayerCoord().x + m)] == 3)                    // check if enemy
                     {
                         for (int i = 0; i < enemy.getEnemyCount(); i++)
                         {
-                            if ((player.getPlayerCoord().x+m) == enemy.getEnemyElement(i).cord.x && player.getPlayerCoord().y + n == enemy.getEnemyElement(i).cord.y)
+                            if ((player.getPlayerCoord().x + m) == enemy.getEnemyElement(i).cord.x && player.getPlayerCoord().y + n == enemy.getEnemyElement(i).cord.y)
                             {
-                                enemy.getEnemyElement(i).cord.x =999 /*enemy.getEnemyElement(enemy.getEnemyCount() - 1).cord.x*/;
-                                enemy.getEnemyElement(i).cord.y =999 /*enemy.getEnemyElement(enemy.getEnemyCount() - 1).cord.y*/;
-                                maze[player.getPlayerCoord().y+n, (player.getPlayerCoord().x + m)] = 0;
+                                enemy.getEnemyElement(i).cord.x = 999 /*enemy.getEnemyElement(enemy.getEnemyCount() - 1).cord.x*/;
+                                enemy.getEnemyElement(i).cord.y = 999 /*enemy.getEnemyElement(enemy.getEnemyCount() - 1).cord.y*/;
+                                maze[player.getPlayerCoord().y + n, (player.getPlayerCoord().x + m)] = 0;
                                 break;
                             }
                         }
 
                         enemy.setEnemyCount(enemy.getEnemyCount() - 1);
-                        maze[player.getPlayerCoord().y+n, (player.getPlayerCoord().x + m)] = 0;
+                        maze[player.getPlayerCoord().y + n, (player.getPlayerCoord().x + m)] = 0;
                         Console.BackgroundColor = ConsoleColor.Black;
                         Sample.ShowEnemy();
                     }
@@ -417,7 +419,7 @@ class Sample
                     n++;
                 }
             }
-        }   
+        }
     }
 
     public static void Main()
@@ -432,7 +434,7 @@ class Sample
         player.setPlayerCoordX(1);
         player.setPlayerCoordY(1);
         Random r = new Random();
-        player.setMoney(100);
+        //player.setMoney(100);
         /////////////////  DRAW MAZE  /////////////////////////////////////////////////////////////////////////////
         for (int y = 0; y < height; y++)
         {
@@ -441,7 +443,7 @@ class Sample
                 int mode = r.Next(0, 101);
                 if (x == 0 || y == 0 || x == width - 1 || y == height - 1) { maze[y, x] = 1; mode = 1; }
                 //else maze[y, x] = r.Next(0, 5);
-                
+
                 if (x == 1 && y == 1) maze[y, x] = 7;
 
                 if (maze[y, x] == 7)
@@ -483,7 +485,7 @@ class Sample
                     Console.Write("+");
                     maze[y, x] = 4;
                 }
-                else if(mode>35 && mode <= 40)
+                else if (mode > 35 && mode <= 40)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.Write("E");
@@ -512,7 +514,7 @@ class Sample
             {
                 if (maze[j, i] == 3)
                 {
-                    enemy.setEnemyElement(cur,new Point());
+                    enemy.setEnemyElement(cur, new Point());
                     enemy.getEnemyElement(cur).dir = 2;
                     enemy.getEnemyElement(cur).cord.x = i;
                     enemy.getEnemyElement(cur).cord.y = j;
@@ -665,7 +667,7 @@ class Sample
 
             if (Console.KeyAvailable)
             {
-                if (bomb.getBombFlag() == true);
+                if (bomb.getBombFlag() == true) ;
                 k = Console.ReadKey(true);
 
                 Console.SetCursorPosition(player.getPlayerCoord().x, player.getPlayerCoord().y);
@@ -683,12 +685,12 @@ class Sample
                         money_total--;
                         Sample.ShowMoney();
                     }
-                    else if(maze[player.getPlayerCoord().y + 1, player.getPlayerCoord().x] == 4)
+                    else if (maze[player.getPlayerCoord().y + 1, player.getPlayerCoord().x] == 4)
                     {
                         player.setLives(player.getLives() + 1);
                         Sample.ShowLives();
                     }
-                    else if(maze[player.getPlayerCoord().y + 1, player.getPlayerCoord().x] == 5)
+                    else if (maze[player.getPlayerCoord().y + 1, player.getPlayerCoord().x] == 5)
                     {
                         player.setEnergy(player.getEnergy() + 11);
                         Sample.ShowEnergy();
@@ -718,7 +720,7 @@ class Sample
                         Sample.ShowEnergy();
                     }
 
-                    player.setPlayerCoordY(player.getPlayerCoord().y-1);
+                    player.setPlayerCoordY(player.getPlayerCoord().y - 1);
                     player.setEnergy(player.getEnergy() - 1);
                     Sample.ShowEnergy();
                 }
@@ -727,16 +729,16 @@ class Sample
                 {
                     if (maze[player.getPlayerCoord().y, player.getPlayerCoord().x - 1] == 2)
                     {
-                        player.setMoney(player.getMoney()+1);
+                        player.setMoney(player.getMoney() + 1);
                         money_total--;
                         Sample.ShowMoney();
                     }
-                    else if (maze[player.getPlayerCoord().y, player.getPlayerCoord().x -1 ] == 4)
+                    else if (maze[player.getPlayerCoord().y, player.getPlayerCoord().x - 1] == 4)
                     {
                         player.setLives(player.getLives() + 1);
                         Sample.ShowLives();
                     }
-                    else if (maze[player.getPlayerCoord().y, player.getPlayerCoord().x -1 ] == 5)
+                    else if (maze[player.getPlayerCoord().y, player.getPlayerCoord().x - 1] == 5)
                     {
                         player.setEnergy(player.getEnergy() + 11);
                         Sample.ShowEnergy();
@@ -1076,68 +1078,68 @@ class Sample
 
             else
             {
-                for (int j = 0; j < height; j++)
+                for(int k = 0; k < enemy.getEnemyCount(); k++)
                 {
-                    for (int i = 0; i < width; i++)
+                    
+                    for (int j = 0; j < height; j++)
                     {
-                        if (maze[j, i] == 3)
+                        for (int i = 0; i < width; i++)
                         {
-                            int num = -1;
-                            for (int q = 0; q < enemy.getEnemyCount(); q++)
+                            if(enemy.getEnemyElement(k).cord.x==i && enemy.getEnemyElement(k).cord.y == j)
                             {
-                                if (enemy.getEnemyElement(q).cord.x == i && enemy.getEnemyElement(q).cord.y == j) { num = q; break; }
-                            }
-                            if (num < 0) continue;
+                                if (enemy.getEnemyElement(k).cord.y == player.getPlayerCoord().y && enemy.getEnemyElement(k).cord.x == player.getPlayerCoord().x)
+                                {
+                                    Sample.Died();
+                                }
 
-                            if (enemy.getEnemyElement(num).cord.y == player.getPlayerCoord().y && enemy.getEnemyElement(num).cord.x == player.getPlayerCoord().x)
-                            {
-                                Sample.Died();
-                            }
+                                Console.SetCursorPosition(enemy.getEnemyElement(k).cord.x, enemy.getEnemyElement(k).cord.y);
+                                Console.BackgroundColor = ConsoleColor.Black;
+                                Console.Write(" ");
+                                maze[enemy.getEnemyElement(k).cord.y, enemy.getEnemyElement(k).cord.x] = 0;
+                                if (enemy.getEnemyElement(k).dir == 1) enemy.getEnemyElement(k).cord.x--;
+                                else if (enemy.getEnemyElement(k).dir == 2) enemy.getEnemyElement(k).cord.y--;
+                                else if (enemy.getEnemyElement(k).dir == 3) enemy.getEnemyElement(k).cord.x++;
+                                else if (enemy.getEnemyElement(k).dir == 4) enemy.getEnemyElement(k).cord.y++;
 
-                            Console.SetCursorPosition(enemy.getEnemyElement(num).cord.x, enemy.getEnemyElement(num).cord.y);
-                            Console.BackgroundColor = ConsoleColor.Black;
-                            Console.Write(" ");
-                            maze[enemy.getEnemyElement(num).cord.y, enemy.getEnemyElement(num).cord.x] = 0;
-                            if (enemy.getEnemyElement(num).dir == 1) enemy.getEnemyElement(num).cord.x--;
-                            else if (enemy.getEnemyElement(num).dir == 2) enemy.getEnemyElement(num).cord.y--;
-                            else if (enemy.getEnemyElement(num).dir == 3) enemy.getEnemyElement(num).cord.x++;
-                            else if (enemy.getEnemyElement(num).dir == 4) enemy.getEnemyElement(num).cord.y++;
+                                if (maze[enemy.getEnemyElement(k).cord.y, enemy.getEnemyElement(k).cord.x] == 2)
+                                {
+                                    maze[enemy.getEnemyElement(k).cord.y, enemy.getEnemyElement(k).cord.x] = 0;
+                                    money_total--;
+                                    Sample.ShowMoney();
+                                }
 
-                            if (maze[enemy.getEnemyElement(num).cord.y, enemy.getEnemyElement(num).cord.x] == 2)
-                            {
-                                maze[enemy.getEnemyElement(num).cord.y, enemy.getEnemyElement(num).cord.x] = 0;
-                                money_total--;
-                                Sample.ShowMoney();
-                            }
+                                if (maze[enemy.getEnemyElement(k).cord.y, enemy.getEnemyElement(k).cord.x] != 0)
+                                {
+                                    if (enemy.getEnemyElement(k).dir == 1) enemy.getEnemyElement(k).cord.x++;
+                                    else if (enemy.getEnemyElement(k).dir == 2) enemy.getEnemyElement(k).cord.y++;
+                                    else if (enemy.getEnemyElement(k).dir == 3) enemy.getEnemyElement(k).cord.x--;
+                                    else if (enemy.getEnemyElement(k).dir == 4) enemy.getEnemyElement(k).cord.y--;
+                                    enemy.getEnemyElement(k).dir = r.Next(1, 5);
 
-                            if (maze[enemy.getEnemyElement(num).cord.y, enemy.getEnemyElement(num).cord.x] != 0)
-                            {
-                                if (enemy.getEnemyElement(num).dir == 1) enemy.getEnemyElement(num).cord.x++;
-                                else if (enemy.getEnemyElement(num).dir == 2) enemy.getEnemyElement(num).cord.y++;
-                                else if (enemy.getEnemyElement(num).dir == 3) enemy.getEnemyElement(num).cord.x--;
-                                else if (enemy.getEnemyElement(num).dir == 4) enemy.getEnemyElement(num).cord.y--;
-                                enemy.getEnemyElement(num).dir = r.Next(1, 5);
-
-                                maze[enemy.getEnemyElement(num).cord.y, enemy.getEnemyElement(num).cord.x] = 3;
-                                Console.SetCursorPosition(enemy.getEnemyElement(num).cord.x, enemy.getEnemyElement(num).cord.y);
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.Write((char)2);
+                                    maze[enemy.getEnemyElement(k).cord.y, enemy.getEnemyElement(k).cord.x] = 3;
+                                    Console.SetCursorPosition(enemy.getEnemyElement(k).cord.x, enemy.getEnemyElement(k).cord.y);
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.Write((char)2);
+                                }
+                                else
+                                {
+                                    Console.SetCursorPosition(enemy.getEnemyElement(k).cord.x, enemy.getEnemyElement(k).cord.y);
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.Write((char)2);
+                                    maze[enemy.getEnemyElement(k).cord.y, enemy.getEnemyElement(k).cord.x] = 3;
+                                }
+                                if (enemy.getEnemyElement(k).dir == 3)
+                                    if (i < width - 1) i++;
+                                    else if (enemy.getEnemyElement(k).dir == 4)
+                                        if (j < height - 1) j++;
+                                j = height;
+                                i = width;
                             }
-                            else
-                            {
-                                Console.SetCursorPosition(enemy.getEnemyElement(num).cord.x, enemy.getEnemyElement(num).cord.y);
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.Write((char)2);
-                                maze[enemy.getEnemyElement(num).cord.y, enemy.getEnemyElement(num).cord.x] = 3;
-                            }
-                            if (enemy.getEnemyElement(num).dir == 3)
-                                if (i < width - 1) i++;
-                            else if (enemy.getEnemyElement(num).dir == 4)
-                                if (j < height - 1) j++;
                         }
                     }
+
                 }
-                Thread.Sleep(60); // ENEMY SPEED
+                Thread.Sleep(75); // ENEMY SPEED
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
